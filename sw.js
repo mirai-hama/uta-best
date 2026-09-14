@@ -1,4 +1,4 @@
-const CACHE_NAME = "uta-best-v6";
+const CACHE_NAME = "uta-best-v7";
 
 const APP_SHELL = [
   "/",
@@ -21,24 +21,21 @@ self.addEventListener("install", event => {
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys()
-      .then(keys =>
-        Promise.all(
-          keys
-            .filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
-        )
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
       )
-      .then(() => self.clients.claim())
+    ).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", event => {
 
-  // DAM★ともなどから共有されたデータを受信
   if (
     event.request.method === "POST" &&
-    new URL(event.request.url).pathname === "/"
+    new URL(event.request.url).pathname === "/share"
   ) {
 
     event.respondWith(
@@ -49,10 +46,7 @@ self.addEventListener("fetch", event => {
           const formData = await event.request.formData();
 
           let image = null;
-
           const entries = [];
-
-          console.log("SHARE FORM DATA", formData);
 
           for (const [key, value] of formData.entries()) {
 
@@ -82,12 +76,10 @@ self.addEventListener("fetch", event => {
               });
 
             }
-
           }
 
           const cache = await caches.open(CACHE_NAME);
 
-          // 受信した内容を記録
           await cache.put(
             SHARE_DEBUG,
             new Response(
@@ -105,7 +97,6 @@ self.addEventListener("fetch", event => {
             )
           );
 
-          // 画像があれば保存
           if (image) {
 
             const imageBlob = await image.arrayBuffer();
@@ -118,7 +109,6 @@ self.addEventListener("fetch", event => {
                 }
               })
             );
-
           }
 
           return Response.redirect(
@@ -150,9 +140,7 @@ self.addEventListener("fetch", event => {
             "/?share-target",
             303
           );
-
         }
-
       })()
     );
 
@@ -168,5 +156,4 @@ self.addEventListener("fetch", event => {
       cached => cached || fetch(event.request)
     )
   );
-
 });
