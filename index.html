@@ -6,28 +6,59 @@
 <meta name="theme-color" content="#1976d2">
 <title>うたベスト</title>
 <link rel="manifest" href="manifest.json">
+
 <style>
 :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;color:#17202a;background:#f4f7fb}
-*{box-sizing:border-box}body{margin:0}.app{max-width:720px;margin:auto;min-height:100vh}
+*{box-sizing:border-box}
+body{margin:0}
+.app{max-width:720px;margin:auto;min-height:100vh}
 header{position:sticky;top:0;z-index:5;background:#1976d2;color:white;padding:14px 16px;box-shadow:0 2px 8px #0002}
-header h1{font-size:22px;margin:0}.sub{font-size:12px;opacity:.9}
-main{padding:14px}.card{background:white;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #0000000d}
-h2{font-size:18px;margin:0 0 12px}.best{display:grid;gap:8px}.rank{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#f5f7fa}
-.medal{font-size:25px;width:32px;text-align:center}.rank .song{flex:1;font-weight:700}.artist{font-size:12px;color:#68727d;margin-top:2px}.score{font-size:20px;font-weight:800;white-space:nowrap}
-.toolbar{display:flex;gap:8px;margin-bottom:12px}.toolbar input{flex:1}
-input,select,button{font:inherit}input,select{width:100%;padding:11px 12px;border:1px solid #ccd3da;border-radius:10px;background:white}
-button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:#1976d2;color:white}.secondary{background:#e9eef5;color:#24313d}.danger{background:#fff0f0;color:#c62828}
-.list{display:grid;gap:9px}.songrow{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #e1e6eb;border-radius:12px;background:#fff;cursor:pointer}
-.songrow .info{flex:1;min-width:0}.songrow .title{font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.songrow .meta{font-size:12px;color:#68727d;margin-top:3px}.songrow .bestscore{font-weight:800;font-size:18px}
+header h1{font-size:22px;margin:0}
+.sub{font-size:12px;opacity:.9}
+main{padding:14px}
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #0000000d}
+h2{font-size:18px;margin:0 0 12px}
+.best{display:grid;gap:8px}
+.rank{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#f5f7fa}
+.medal{font-size:25px;width:32px;text-align:center}
+.rank .song{flex:1;font-weight:700}
+.artist{font-size:12px;color:#68727d;margin-top:2px}
+.score{font-size:20px;font-weight:800;white-space:nowrap}
+.toolbar{display:flex;gap:8px;margin-bottom:12px}
+.toolbar input{flex:1}
+input,select,button{font:inherit}
+input,select{width:100%;padding:11px 12px;border:1px solid #ccd3da;border-radius:10px;background:white}
+button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer}
+.primary{background:#1976d2;color:white}
+.secondary{background:#e9eef5;color:#24313d}
+.danger{background:#fff0f0;color:#c62828}
+.list{display:grid;gap:9px}
+.songrow{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #e1e6eb;border-radius:12px;background:#fff;cursor:pointer}
+.songrow .info{flex:1;min-width:0}
+.songrow .title{font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.songrow .meta{font-size:12px;color:#68727d;margin-top:3px}
+.songrow .bestscore{font-weight:800;font-size:18px}
 .empty{text-align:center;color:#7a848e;padding:22px 8px}
-.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;z-index:20}.modal.show{display:flex}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.show{display:flex}
 .sheet{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px 20px 0 0;padding:18px}
-.formgrid{display:grid;gap:10px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.actions{display:flex;gap:8px;margin-top:14px}.actions button{flex:1}
-.scorelist{display:grid;gap:12px}.scorecard{border:1px solid #e0e5ea;border-radius:14px;padding:12px}.scorehead{display:flex;align-items:center;gap:8px}.scorehead b{font-size:20px}.scorehead .sc{margin-left:auto;font-size:22px;font-weight:850}
-.photos{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}.photoBox{border:1px dashed #b8c2cc;border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f7f9fb;position:relative}
-.photoBox img{width:100%;height:160px;object-fit:contain}.photoBox[onclick]{cursor:zoom-in}.photoLabel{color:#68727d;font-size:12px;text-align:center;padding:8px}.photoBox input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.small{font-size:12px;color:#68727d}.sectiontitle{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.formgrid{display:grid;gap:10px}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:8px;margin-top:14px}
+.actions button{flex:1}
+.scorelist{display:grid;gap:12px}
+.scorecard{border:1px solid #e0e5ea;border-radius:14px;padding:12px}
+.scorehead{display:flex;align-items:center;gap:8px}
+.scorehead b{font-size:20px}
+.scorehead .sc{margin-left:auto;font-size:22px;font-weight:850}
+.photos{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+.photoBox{border:1px dashed #b8c2cc;border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f7f9fb;position:relative}
+.photoBox img{width:100%;height:160px;object-fit:contain}
+.photoBox[onclick]{cursor:zoom-in}
+.photoLabel{color:#68727d;font-size:12px;text-align:center;padding:8px}
+.photoBox input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.small{font-size:12px;color:#68727d}
+.sectiontitle{display:flex;align-items:center;justify-content:space-between;gap:8px}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#17202a;color:white;padding:10px 15px;border-radius:999px;display:none;z-index:30;font-size:13px}
 .shareDebug{margin:14px 0;padding:14px;border-radius:14px;background:#eef6ff;border:1px solid #b8d9ff;display:none}
 .shareDebug b{display:block;margin-bottom:6px}
@@ -35,40 +66,70 @@ button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:poin
 @media(max-width:430px){.twocol{grid-template-columns:1fr}.score{font-size:18px}}
 </style>
 </head>
+
 <body>
+
 <div class="app">
-<header><h1>🎤 うたベスト</h1><div class="sub">カラオケの自己ベスト3を記録</div></header>
+
+<header>
+  <h1>🎤 うたベスト</h1>
+  <div class="sub">カラオケの自己ベスト3を記録</div>
+</header>
 
 <main>
 
 <div id="shareDebug" class="shareDebug">
   <b>📷 共有データを確認中</b>
-  <div id="shareDebugText">DAM★ともからのデータを確認しています。</div>
+  <div id="shareDebugText">共有データを確認しています。</div>
   <div id="shareDebugData" class="debugData" style="display:none"></div>
 </div>
 
 <section class="card">
-  <div class="sectiontitle"><h2>🏆 全曲ベスト3</h2><span class="small" id="songCount"></span></div>
+  <div class="sectiontitle">
+    <h2>🏆 全曲ベスト3</h2>
+    <span class="small" id="songCount"></span>
+  </div>
   <div id="overallBest" class="best"></div>
 </section>
 
 <section class="card">
-  <div class="sectiontitle"><h2>🎵 曲一覧</h2><button class="primary" onclick="openSongForm()">＋曲を追加</button></div>
-  <div class="toolbar"><input id="search" placeholder="曲名・アーティストで検索" oninput="renderSongs()"></div>
+  <div class="sectiontitle">
+    <h2>🎵 曲一覧</h2>
+    <button class="primary" onclick="openSongForm()">＋曲を追加</button>
+  </div>
+
+  <div class="toolbar">
+    <input id="search" placeholder="曲名・アーティストで検索" oninput="renderSongs()">
+  </div>
+
   <div id="songList" class="list"></div>
 </section>
 
 </main>
 </div>
 
-<div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
+  <div class="sheet" id="sheet"></div>
+</div>
+
 <div id="toast"></div>
 
 <script>
-const KEY="uta-best-v1";
-let data=JSON.parse(localStorage.getItem(KEY)||'{"songs":[]}');
 
-const CACHE_NAMES=["uta-best-v6","uta-best-v5","uta-best-v4"];
+const KEY="uta-best-v1";
+
+let data=JSON.parse(
+  localStorage.getItem(KEY)||'{"songs":[]}'
+);
+
+/* 最新のService Workerから共有データを探す */
+const CACHE_NAMES=[
+  "uta-best-v7",
+  "uta-best-v6",
+  "uta-best-v5",
+  "uta-best-v4"
+];
+
 const SHARED_IMAGE="/__uta-best-shared-image";
 const SHARE_DEBUG="/__uta-best-share-debug";
 
@@ -95,7 +156,10 @@ function esc(s){
 function showToast(t){
   $("toast").textContent=t;
   $("toast").style.display="block";
-  setTimeout(()=>$("toast").style.display="none",1700);
+
+  setTimeout(()=>{
+    $("toast").style.display="none";
+  },1700);
 }
 
 function closeModal(){
@@ -109,21 +173,54 @@ function openModal(html){
 }
 
 function openSongForm(id=null){
-  const s=id?data.songs.find(x=>x.id===id):null;
 
-  openModal(`<h2>${s?"曲情報を編集":"曲を追加"}</h2>
-  <div class="formgrid">
-    <label>曲名<input id="fTitle" value="${esc(s?.title)}" placeholder="例：海の声"></label>
-    <label>アーティスト<input id="fArtist" value="${esc(s?.artist)}" placeholder="例：浦島太郎"></label>
-    <label>キー<input id="fKey" value="${esc(s?.key)}" placeholder="例：−2、＋1"></label>
-  </div>
-  <div class="actions">
-    <button class="secondary" onclick="closeModal()">キャンセル</button>
-    <button class="primary" onclick="saveSong('${id||""}')">保存</button>
-  </div>`);
+  const s=id
+    ?data.songs.find(x=>x.id===id)
+    :null;
+
+  openModal(`
+    <h2>${s?"曲情報を編集":"曲を追加"}</h2>
+
+    <div class="formgrid">
+
+      <label>
+        曲名
+        <input
+          id="fTitle"
+          value="${esc(s?.title)}"
+          placeholder="例：海の声"
+        >
+      </label>
+
+      <label>
+        アーティスト
+        <input
+          id="fArtist"
+          value="${esc(s?.artist)}"
+          placeholder="例：浦島太郎"
+        >
+      </label>
+
+      <label>
+        キー
+        <input
+          id="fKey"
+          value="${esc(s?.key)}"
+          placeholder="例：−2、＋1"
+        >
+      </label>
+
+    </div>
+
+    <div class="actions">
+      <button class="secondary" onclick="closeModal()">キャンセル</button>
+      <button class="primary" onclick="saveSong('${id||""}')">保存</button>
+    </div>
+  `);
 }
 
 function saveSong(id){
+
   const title=$("fTitle").value.trim();
   const artist=$("fArtist").value.trim();
   const key=$("fKey").value.trim();
@@ -134,9 +231,17 @@ function saveSong(id){
   }
 
   if(id){
+
     const s=data.songs.find(x=>x.id===id);
-    Object.assign(s,{title,artist,key});
+
+    Object.assign(s,{
+      title,
+      artist,
+      key
+    });
+
   }else{
+
     data.songs.push({
       id:uid(),
       title,
@@ -144,35 +249,72 @@ function saveSong(id){
       key,
       scores:[]
     });
+
   }
 
   save();
   closeModal();
   render();
-  showToast(id?"更新しました":"曲を追加しました");
+
+  showToast(
+    id
+      ?"更新しました"
+      :"曲を追加しました"
+  );
 }
 
 function addScore(songId){
+
   const s=data.songs.find(x=>x.id===songId);
 
-  openModal(`<h2>🎤 ${esc(s.title)} に点数を追加</h2>
-  <p class="small">カラオケ中は点数だけ入力。写真はあとから曲の画面で追加できます。</p>
-  <label>点数<input id="newScore" type="number" step="0.001" min="0" max="100" placeholder="例：92.647" inputmode="decimal"></label>
-  <div class="actions">
-    <button class="secondary" onclick="closeModal()">キャンセル</button>
-    <button class="primary" onclick="saveScore('${songId}')">点数を保存</button>
-  </div>`);
+  openModal(`
+    <h2>🎤 ${esc(s.title)} に点数を追加</h2>
+
+    <p class="small">
+      カラオケ中は点数だけ入力。
+      写真はあとから曲の画面で追加できます。
+    </p>
+
+    <label>
+      点数
+      <input
+        id="newScore"
+        type="number"
+        step="0.001"
+        min="0"
+        max="100"
+        placeholder="例：92.647"
+        inputmode="decimal"
+      >
+    </label>
+
+    <div class="actions">
+      <button class="secondary" onclick="closeModal()">キャンセル</button>
+      <button class="primary" onclick="saveScore('${songId}')">
+        点数を保存
+      </button>
+    </div>
+  `);
 }
 
 function saveScore(songId){
-  const n=parseFloat($("newScore").value);
 
-  if(!Number.isFinite(n)||n<0||n>100){
+  const n=parseFloat(
+    $("newScore").value
+  );
+
+  if(
+    !Number.isFinite(n)||
+    n<0||
+    n>100
+  ){
     showToast("点数を正しく入力してください");
     return;
   }
 
-  const s=data.songs.find(x=>x.id===songId);
+  const s=data.songs.find(
+    x=>x.id===songId
+  );
 
   s.scores.push({
     id:uid(),
@@ -180,73 +322,163 @@ function saveScore(songId){
     photo1:""
   });
 
-  s.scores.sort((a,b)=>b.score-a.score);
+  s.scores.sort(
+    (a,b)=>b.score-a.score
+  );
+
   s.scores=s.scores.slice(0,3);
 
   save();
   closeModal();
   openSong(songId);
   render();
+
   showToast("点数を保存しました");
 }
 
 function openSong(id){
-  const s=data.songs.find(x=>x.id===id);
+
+  const s=data.songs.find(
+    x=>x.id===id
+  );
 
   if(!s)return;
 
-  const scores=[...s.scores].sort((a,b)=>b.score-a.score);
+  const scores=[...s.scores]
+    .sort((a,b)=>b.score-a.score);
 
-  openModal(`<div class="sectiontitle">
-    <h2>🎵 ${esc(s.title)}</h2>
-    <button class="secondary" onclick="closeModal()">閉じる</button>
-  </div>
+  openModal(`
 
-  <div class="small">
-    ${esc(s.artist||"アーティスト未入力")}　｜　キー：${esc(s.key||"未設定")}
-  </div>
+    <div class="sectiontitle">
+      <h2>🎵 ${esc(s.title)}</h2>
+      <button
+        class="secondary"
+        onclick="closeModal()"
+      >
+        閉じる
+      </button>
+    </div>
 
-  <div class="actions">
-    <button class="primary" onclick="addScore('${s.id}')">＋点数を追加</button>
-    <button class="secondary" onclick="openSongForm('${s.id}')">曲情報を編集</button>
-    <button class="danger" onclick="deleteSong('${s.id}')">🗑️ 曲を削除</button>
-  </div>
+    <div class="small">
+      ${esc(s.artist||"アーティスト未入力")}
+      ｜ キー：${esc(s.key||"未設定")}
+    </div>
 
-  <div style="margin-top:14px" class="scorelist">
-    ${scores.length?scores.map((r,i)=>scoreCard(s,r,i)).join(""):'<div class="empty">まだ点数がありません</div>'}
-  </div>`);
+    <div class="actions">
+
+      <button
+        class="primary"
+        onclick="addScore('${s.id}')"
+      >
+        ＋点数を追加
+      </button>
+
+      <button
+        class="secondary"
+        onclick="openSongForm('${s.id}')"
+      >
+        曲情報を編集
+      </button>
+
+      <button
+        class="danger"
+        onclick="deleteSong('${s.id}')"
+      >
+        🗑️ 曲を削除
+      </button>
+
+    </div>
+
+    <div
+      style="margin-top:14px"
+      class="scorelist"
+    >
+      ${
+        scores.length
+          ?scores.map(
+            (r,i)=>scoreCard(s,r,i)
+          ).join("")
+          :'<div class="empty">まだ点数がありません</div>'
+      }
+    </div>
+  `);
 }
 
 function scoreCard(s,r,i){
+
   const p1=r.photo1
-    ?`<div class="photoBox" onclick="viewPhoto('${s.id}','${r.id}')">
-        <img src="${r.photo1}" alt="採点結果の写真">
-      </div>`
-    :`<label class="photoBox">
-        <div class="photoLabel">📷 採点結果<br>あとから追加</div>
-        <input type="file" accept="image/*" onchange="photoChanged('${s.id}','${r.id}',this)">
-      </label>`;
 
-  return `<div class="scorecard">
-    <div class="scorehead">
-      <b>${["🥇","🥈","🥉"][i]}</b>
-      <span>${i+1}位</span>
-      <span class="sc">${r.score.toFixed(3)}点</span>
+    ?`
+      <div
+        class="photoBox"
+        onclick="viewPhoto('${s.id}','${r.id}')"
+      >
+        <img
+          src="${r.photo1}"
+          alt="採点結果の写真"
+        >
+      </div>
+    `
+
+    :`
+      <label class="photoBox">
+        <div class="photoLabel">
+          📷 採点結果<br>
+          あとから追加
+        </div>
+
+        <input
+          type="file"
+          accept="image/*"
+          onchange="photoChanged(
+            '${s.id}',
+            '${r.id}',
+            this
+          )"
+        >
+      </label>
+    `;
+
+  return `
+
+    <div class="scorecard">
+
+      <div class="scorehead">
+        <b>${["🥇","🥈","🥉"][i]}</b>
+        <span>${i+1}位</span>
+        <span class="sc">
+          ${r.score.toFixed(3)}点
+        </span>
+      </div>
+
+      <div class="photos">
+        ${p1}
+      </div>
+
+      <div class="actions">
+        <button
+          class="secondary"
+          onclick="changePhoto('${s.id}','${r.id}')"
+        >
+          📷 写真を変更
+        </button>
+      </div>
+
+      <div class="actions">
+        <button
+          class="danger"
+          onclick="removeScore('${s.id}','${r.id}')"
+        >
+          この記録を削除
+        </button>
+      </div>
+
     </div>
-
-    <div class="photos">${p1}</div>
-
-    <div class="actions">
-      <button class="secondary" onclick="changePhoto('${s.id}','${r.id}')">📷 写真を変更</button>
-    </div>
-
-    <div class="actions">
-      <button class="danger" onclick="removeScore('${s.id}','${r.id}')">この記録を削除</button>
-    </div>
-  </div>`;
+  `;
 }
 
 function photoChanged(songId,scoreId,input){
+
   const file=input.files?.[0];
 
   if(!file)return;
@@ -254,75 +486,163 @@ function photoChanged(songId,scoreId,input){
   const reader=new FileReader();
 
   reader.onload=()=>{
-    const s=data.songs.find(x=>x.id===songId);
-    const r=s.scores.find(x=>x.id===scoreId);
+
+    const s=data.songs.find(
+      x=>x.id===songId
+    );
+
+    const r=s.scores.find(
+      x=>x.id===scoreId
+    );
 
     r.photo1=reader.result;
 
     save();
     openSong(songId);
-    showToast("写真を保存しました");
+
+    showToast(
+      "写真を保存しました"
+    );
   };
 
   reader.readAsDataURL(file);
 }
 
 function changePhoto(songId,scoreId){
+
   const input=document.createElement("input");
 
   input.type="file";
   input.accept="image/*";
-  input.onchange=()=>photoChanged(songId,scoreId,input);
+
+  input.onchange=()=>{
+    photoChanged(
+      songId,
+      scoreId,
+      input
+    );
+  };
 
   input.click();
 }
 
 function viewPhoto(songId,scoreId){
-  const s=data.songs.find(x=>x.id===songId);
-  const r=s.scores.find(x=>x.id===scoreId);
+
+  const s=data.songs.find(
+    x=>x.id===songId
+  );
+
+  const r=s.scores.find(
+    x=>x.id===scoreId
+  );
+
   const src=r.photo1;
 
   if(!src)return;
 
-  openModal(`<div class="sectiontitle">
-    <span></span>
-    <button class="secondary" onclick="closeModal()">閉じる</button>
-  </div>
+  openModal(`
 
-  <div style="background:#f4f6fa;border-radius:14px;padding:8px;text-align:center;margin-top:10px">
-    <img src="${src}" style="max-width:100%;max-height:70vh;object-fit:contain;border-radius:10px">
-  </div>
+    <div class="sectiontitle">
+      <span></span>
 
-  <div class="actions">
-    <button class="secondary" onclick="changePhoto('${songId}','${scoreId}')">写真を変更</button>
-    <button class="danger" onclick="deletePhoto('${songId}','${scoreId}')">写真を削除</button>
-  </div>`);
+      <button
+        class="secondary"
+        onclick="closeModal()"
+      >
+        閉じる
+      </button>
+    </div>
+
+    <div
+      style="
+        background:#f4f6fa;
+        border-radius:14px;
+        padding:8px;
+        text-align:center;
+        margin-top:10px
+      "
+    >
+
+      <img
+        src="${src}"
+        style="
+          max-width:100%;
+          max-height:70vh;
+          object-fit:contain;
+          border-radius:10px
+        "
+      >
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="secondary"
+        onclick="changePhoto('${songId}','${scoreId}')"
+      >
+        写真を変更
+      </button>
+
+      <button
+        class="danger"
+        onclick="deletePhoto('${songId}','${scoreId}')"
+      >
+        写真を削除
+      </button>
+
+    </div>
+  `);
 }
 
 function deletePhoto(songId,scoreId){
-  const s=data.songs.find(x=>x.id===songId);
-  const r=s.scores.find(x=>x.id===scoreId);
+
+  const s=data.songs.find(
+    x=>x.id===songId
+  );
+
+  const r=s.scores.find(
+    x=>x.id===scoreId
+  );
 
   r.photo1="";
+
   save();
   openSong(songId);
-  showToast("写真を削除しました");
+
+  showToast(
+    "写真を削除しました"
+  );
 }
 
 function migratePhotosToOne(){
+
   let changed=false;
 
-  data.songs.forEach(s=>s.scores.forEach(r=>{
-    if(!r.photo1 && r.photo2){
-      r.photo1=r.photo2;
-      changed=true;
-    }
+  data.songs.forEach(s=>
+    s.scores.forEach(r=>{
 
-    if(Object.prototype.hasOwnProperty.call(r,"photo2")){
-      delete r.photo2;
-      changed=true;
-    }
-  }));
+      if(!r.photo1&&r.photo2){
+
+        r.photo1=r.photo2;
+        changed=true;
+
+      }
+
+      if(
+        Object.prototype.hasOwnProperty.call(
+          r,
+          "photo2"
+        )
+      ){
+
+        delete r.photo2;
+        changed=true;
+
+      }
+
+    })
+  );
 
   if(changed)save();
 }
@@ -330,330 +650,678 @@ function migratePhotosToOne(){
 migratePhotosToOne();
 
 function removeScore(songId,scoreId){
-  if(!confirm("この点数記録を削除しますか？"))return;
 
-  const s=data.songs.find(x=>x.id===songId);
+  if(
+    !confirm(
+      "この点数記録を削除しますか？"
+    )
+  )return;
 
-  s.scores=s.scores.filter(r=>r.id!==scoreId);
+  const s=data.songs.find(
+    x=>x.id===songId
+  );
+
+  s.scores=s.scores.filter(
+    r=>r.id!==scoreId
+  );
 
   save();
   openSong(songId);
   render();
+
   showToast("削除しました");
 }
 
 function deleteSong(id){
-  if(!confirm("この曲と保存した写真をすべて削除しますか？"))return;
 
-  data.songs=data.songs.filter(s=>s.id!==id);
+  if(
+    !confirm(
+      "この曲と保存した写真をすべて削除しますか？"
+    )
+  )return;
+
+  data.songs=data.songs.filter(
+    s=>s.id!==id
+  );
 
   save();
   closeModal();
   render();
+
   showToast("削除しました");
 }
 
 function render(){
+
   renderBest();
   renderSongs();
-  $("songCount").textContent=`${data.songs.length}曲`;
+
+  $("songCount").textContent=
+    `${data.songs.length}曲`;
 }
 
 function renderBest(){
+
   const all=data.songs
+
     .map(s=>({
       s,
-      score:Math.max(0,...s.scores.map(r=>r.score))
+      score:Math.max(
+        0,
+        ...s.scores.map(
+          r=>r.score
+        )
+      )
     }))
+
     .filter(x=>x.score>0)
-    .sort((a,b)=>b.score-a.score)
+
+    .sort(
+      (a,b)=>b.score-a.score
+    )
+
     .slice(0,3);
 
-  $("overallBest").innerHTML=all.length
-    ?all.map((x,i)=>`<div class="rank">
-        <div class="medal">${["🥇","🥈","🥉"][i]}</div>
-        <div class="song">
-          ${esc(x.s.title)}
-          <div class="artist">${esc(x.s.artist||"")}</div>
+  $("overallBest").innerHTML=
+
+    all.length
+
+      ?all.map(
+        (x,i)=>`
+
+          <div class="rank">
+
+            <div class="medal">
+              ${["🥇","🥈","🥉"][i]}
+            </div>
+
+            <div class="song">
+
+              ${esc(x.s.title)}
+
+              <div class="artist">
+                ${esc(x.s.artist||"")}
+              </div>
+
+            </div>
+
+            <div class="score">
+              ${x.score.toFixed(3)}
+            </div>
+
+          </div>
+        `
+      ).join("")
+
+      :`
+        <div class="empty">
+          まだ点数がありません。<br>
+          曲を追加して点数を登録してみよう！
         </div>
-        <div class="score">${x.score.toFixed(3)}</div>
-      </div>`).join("")
-    :'<div class="empty">まだ点数がありません。<br>曲を追加して点数を登録してみよう！</div>';
+      `;
 }
 
 function renderSongs(){
-  const q=($("search").value||"").toLowerCase();
+
+  const q=(
+    $("search").value||""
+  ).toLowerCase();
 
   const list=data.songs
-    .filter(s=>(s.title+" "+s.artist).toLowerCase().includes(q))
-    .sort((a,b)=>
-      (Math.max(0,...b.scores.map(r=>r.score)))-
-      (Math.max(0,...a.scores.map(r=>r.score)))
+
+    .filter(s=>
+      (s.title+" "+s.artist)
+        .toLowerCase()
+        .includes(q)
+    )
+
+    .sort(
+      (a,b)=>
+        Math.max(
+          0,
+          ...b.scores.map(r=>r.score)
+        )
+        -
+        Math.max(
+          0,
+          ...a.scores.map(r=>r.score)
+        )
     );
 
-  $("songList").innerHTML=list.length
-    ?list.map(s=>{
-      const best=Math.max(0,...s.scores.map(r=>r.score));
+  $("songList").innerHTML=
 
-      return `<div class="songrow" onclick="openSong('${s.id}')">
-        <div class="info">
-          <div class="title">${esc(s.title)}</div>
-          <div class="meta">
-            ${esc(s.artist||"アーティスト未入力")}　｜　
-            キー：${esc(s.key||"未設定")}　｜　
-            記録 ${s.scores.length}/3
+    list.length
+
+      ?list.map(s=>{
+
+        const best=Math.max(
+          0,
+          ...s.scores.map(
+            r=>r.score
+          )
+        );
+
+        return `
+
+          <div
+            class="songrow"
+            onclick="openSong('${s.id}')"
+          >
+
+            <div class="info">
+
+              <div class="title">
+                ${esc(s.title)}
+              </div>
+
+              <div class="meta">
+
+                ${esc(
+                  s.artist||
+                  "アーティスト未入力"
+                )}
+
+                ｜キー：
+                ${esc(
+                  s.key||
+                  "未設定"
+                )}
+
+                ｜記録
+                ${s.scores.length}/3
+
+              </div>
+
+            </div>
+
+            <div class="bestscore">
+              ${best
+                ?best.toFixed(3)
+                :"—"}
+            </div>
+
           </div>
+
+        `;
+
+      }).join("")
+
+      :`
+        <div class="empty">
+          曲がありません
         </div>
-        <div class="bestscore">${best?best.toFixed(3):"—"}</div>
-      </div>`;
-    }).join("")
-    :'<div class="empty">曲がありません</div>';
+      `;
 }
 
 render();
+
 </script>
 
-<div id="backupPanel" style="margin:18px 0 30px;padding:16px;border-radius:16px;background:rgba(255,255,255,.92);box-shadow:0 4px 16px rgba(70,70,130,.10)">
-  <div style="font-weight:700;font-size:16px;margin-bottom:8px">💾 データのバックアップ</div>
+<div
+  id="backupPanel"
+  style="
+    margin:18px 0 30px;
+    padding:16px;
+    border-radius:16px;
+    background:rgba(255,255,255,.92);
+    box-shadow:0 4px 16px rgba(70,70,130,.10)
+  "
+>
 
-  <div style="font-size:13px;line-height:1.6;margin-bottom:12px">
+  <div
+    style="
+      font-weight:700;
+      font-size:16px;
+      margin-bottom:8px
+    "
+  >
+    💾 データのバックアップ
+  </div>
+
+  <div
+    style="
+      font-size:13px;
+      line-height:1.6;
+      margin-bottom:12px
+    "
+  >
     曲・点数・キー・写真をファイルに保存できます。<br>
-    スマホを買い替えるときは、古いスマホでバックアップして、新しいスマホで復元してください。
+    スマホを買い替えるときは、
+    古いスマホでバックアップして、
+    新しいスマホで復元してください。
   </div>
 
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button type="button" onclick="backupUtaBest()">📤 データをバックアップ</button>
-    <button type="button" onclick="document.getElementById('restoreFile').click()">📥 データを復元</button>
-    <input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreUtaBest(event)">
+  <div
+    style="
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap
+    "
+  >
+
+    <button
+      type="button"
+      onclick="backupUtaBest()"
+    >
+      📤 データをバックアップ
+    </button>
+
+    <button
+      type="button"
+      onclick="
+        document
+          .getElementById('restoreFile')
+          .click()
+      "
+    >
+      📥 データを復元
+    </button>
+
+    <input
+      id="restoreFile"
+      type="file"
+      accept=".json,application/json"
+      style="display:none"
+      onchange="restoreUtaBest(event)"
+    >
+
   </div>
+
 </div>
 
 <script>
+
 function backupUtaBest(){
+
   try{
+
     const backupData={};
 
-    for(let i=0;i<localStorage.length;i++){
+    for(
+      let i=0;
+      i<localStorage.length;
+      i++
+    ){
+
       const k=localStorage.key(i);
-      backupData[k]=localStorage.getItem(k);
+
+      backupData[k]=
+        localStorage.getItem(k);
     }
 
     const blob=new Blob(
-      [JSON.stringify({
-        app:"うたベスト",
-        version:1,
-        data:backupData
-      })],
-      {type:"application/json"}
+      [
+        JSON.stringify({
+          app:"うたベスト",
+          version:1,
+          data:backupData
+        })
+      ],
+      {
+        type:"application/json"
+      }
     );
 
     const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
+
+    a.href=
+      URL.createObjectURL(blob);
 
     const d=new Date();
-    const pad=n=>String(n).padStart(2,"0");
 
-    a.download=`うたベスト_バックアップ_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`;
+    const pad=n=>
+      String(n).padStart(2,"0");
+
+    a.download=
+      `うたベスト_バックアップ_${
+        d.getFullYear()
+      }${
+        pad(d.getMonth()+1)
+      }${
+        pad(d.getDate())
+      }.json`;
 
     document.body.appendChild(a);
+
     a.click();
+
     a.remove();
 
-    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    setTimeout(
+      ()=>URL.revokeObjectURL(a.href),
+      1000
+    );
 
-    alert("バックアップファイルを保存しました");
+    alert(
+      "バックアップファイルを保存しました"
+    );
+
   }catch(e){
-    alert("バックアップに失敗しました");
+
+    alert(
+      "バックアップに失敗しました"
+    );
+
   }
 }
 
 function restoreUtaBest(event){
-  const file=event.target.files[0];
+
+  const file=
+    event.target.files[0];
 
   event.target.value="";
 
   if(!file)return;
 
-  const reader=new FileReader();
+  const reader=
+    new FileReader();
 
   reader.onload=function(){
-    try{
-      const obj=JSON.parse(reader.result);
 
-      if(!obj||obj.app!=="うたベスト"||!obj.data){
+    try{
+
+      const obj=
+        JSON.parse(reader.result);
+
+      if(
+        !obj||
+        obj.app!=="うたベスト"||
+        !obj.data
+      ){
         throw new Error();
       }
 
-      if(!confirm("現在のうたベストのデータをバックアップの内容で置き換えます。よろしいですか？")){
+      if(
+        !confirm(
+          "現在のうたベストのデータをバックアップの内容で置き換えます。よろしいですか？"
+        )
+      ){
         return;
       }
 
       localStorage.clear();
 
       Object.keys(obj.data).forEach(k=>{
-        localStorage.setItem(k,obj.data[k]);
+
+        localStorage.setItem(
+          k,
+          obj.data[k]
+        );
+
       });
 
-      alert("データを復元しました。アプリを再読み込みします。");
+      alert(
+        "データを復元しました。アプリを再読み込みします。"
+      );
+
       location.reload();
 
     }catch(e){
-      alert("このファイルは、うたベストのバックアップファイルではありません");
+
+      alert(
+        "このファイルは、うたベストのバックアップファイルではありません"
+      );
+
     }
+
   };
 
   reader.readAsText(file);
 }
+
 </script>
 
 <script>
+
 /*
-  DAM★とも共有データの確認
-  v5のService Workerが保存した
-  「実際に届いたデータ」を表示する。
+  共有データ確認
+  最新のService Workerが保存した
+  実際に届いたデータを確認する。
 */
 
 async function receiveSharedImage(){
 
-  const debugBox=$("shareDebug");
-  const debugText=$("shareDebugText");
-  const debugData=$("shareDebugData");
+  const debugBox=
+    $("shareDebug");
 
-  if(!location.search.includes("share-target")){
+  const debugText=
+    $("shareDebugText");
+
+  const debugData=
+    $("shareDebugData");
+
+  if(
+    !location.search.includes(
+      "share-target"
+    )
+  ){
     return;
   }
 
   debugBox.style.display="block";
-  debugText.textContent="DAM★ともから届いたデータを確認しています……";
+
+  debugText.textContent=
+    "共有されたデータを確認しています……";
 
   try{
 
     let debugFound=null;
     let debugCacheName="";
 
-    /*
-      まずv5のデバッグ情報を探す。
-    */
-    for(const cacheName of CACHE_NAMES){
+    for(
+      const cacheName
+      of CACHE_NAMES
+    ){
 
       try{
 
-        const cache=await caches.open(cacheName);
-        const res=await cache.match(SHARE_DEBUG);
+        const cache=
+          await caches.open(
+            cacheName
+          );
+
+        const res=
+          await cache.match(
+            SHARE_DEBUG
+          );
 
         if(res){
+
           debugFound=res;
-          debugCacheName=cacheName;
+          debugCacheName=
+            cacheName;
+
           break;
         }
 
       }catch(e){
 
-        console.log("debug cache check error",cacheName,e);
+        console.log(
+          "debug cache check error",
+          cacheName,
+          e
+        );
 
       }
 
     }
 
-    /*
-      デバッグ情報を表示。
-    */
     if(debugFound){
 
       try{
 
-        const debugJson=await debugFound.json();
+        const debugJson=
+          await debugFound.json();
 
         let text="";
 
-        text+="使用されたキャッシュ: "+debugCacheName+"\n\n";
+        text+=
+          "使用されたキャッシュ: "+
+          debugCacheName+
+          "\n\n";
 
-        if(debugJson.received===true){
+        if(
+          debugJson.received===true
+        ){
 
-          text+="受信処理: 成功\n";
-          text+="画像発見: "+(debugJson.imageFound?"YES":"NO")+"\n";
+          text+=
+            "受信処理: 成功\n";
 
-          if(debugJson.entries){
+          text+=
+            "画像発見: "+
+            (
+              debugJson.imageFound
+                ?"YES"
+                :"NO"
+            )+
+            "\n";
 
-            text+="\n--- 受信したデータ ---\n";
+          if(
+            debugJson.entries
+          ){
 
-            debugJson.entries.forEach((entry,i)=>{
+            text+=
+              "\n--- 受信したデータ ---\n";
 
-              text+="\n["+i+"] ";
+            debugJson.entries
+              .forEach(
+                (entry,i)=>{
 
-              if(entry.type==="text"){
+                  text+=
+                    "\n["+i+"] ";
 
-                text+="項目名: "+entry.key+"\n";
-                text+="種類: text\n";
-                text+="内容: "+entry.value;
+                  if(
+                    entry.type==="text"
+                  ){
 
-              }else{
+                    text+=
+                      "項目名: "+
+                      entry.key+
+                      "\n";
 
-                text+="項目名: "+entry.key+"\n";
-                text+="種類: "+entry.type+"\n";
-                text+="ファイル名: "+entry.name+"\n";
-                text+="サイズ: "+entry.size+" bytes";
+                    text+=
+                      "種類: text\n";
 
-              }
+                    text+=
+                      "内容: "+
+                      entry.value;
 
-              text+="\n";
+                  }else{
 
-            });
+                    text+=
+                      "項目名: "+
+                      entry.key+
+                      "\n";
+
+                    text+=
+                      "種類: "+
+                      entry.type+
+                      "\n";
+
+                    text+=
+                      "ファイル名: "+
+                      entry.name+
+                      "\n";
+
+                    text+=
+                      "サイズ: "+
+                      entry.size+
+                      " bytes";
+
+                  }
+
+                  text+="\n";
+
+                }
+              );
 
           }
 
         }else{
 
-          text+="受信処理: 失敗\n";
-          text+="エラー: "+(debugJson.error||"不明");
+          text+=
+            "受信処理: 失敗\n";
+
+          text+=
+            "エラー: "+
+            (
+              debugJson.error||
+              "不明"
+            );
 
         }
 
         if(debugJson.time){
-          text+="\n\n受信時刻: "+debugJson.time;
+
+          text+=
+            "\n\n受信時刻: "+
+            debugJson.time;
+
         }
 
-        debugData.textContent=text;
-        debugData.style.display="block";
+        debugData.textContent=
+          text;
 
-        debugText.textContent="DAM★ともから届いたデータを確認しました。";
+        debugData.style.display=
+          "block";
+
+        debugText.textContent=
+          "共有データを確認しました。";
 
       }catch(e){
 
-        debugData.textContent="デバッグ情報の読み取りに失敗しました。";
-        debugData.style.display="block";
+        debugData.textContent=
+          "デバッグ情報の読み取りに失敗しました。";
+
+        debugData.style.display=
+          "block";
 
       }
 
     }else{
 
-      debugText.textContent="共有データの確認情報が見つかりませんでした。";
+      debugText.textContent=
+        "共有データの確認情報が見つかりませんでした。";
 
     }
-
-    /*
-      実際の画像も確認。
-    */
 
     let found=null;
     let foundCacheName="";
 
-    for(const cacheName of CACHE_NAMES){
+    for(
+      const cacheName
+      of CACHE_NAMES
+    ){
 
       try{
 
-        const cache=await caches.open(cacheName);
-        const res=await cache.match(SHARED_IMAGE);
+        const cache=
+          await caches.open(
+            cacheName
+          );
+
+        const res=
+          await cache.match(
+            SHARED_IMAGE
+          );
 
         if(res){
+
           found=res;
-          foundCacheName=cacheName;
+          foundCacheName=
+            cacheName;
+
           break;
         }
 
       }catch(e){
 
-        console.log("image cache check error",cacheName,e);
+        console.log(
+          "image cache check error",
+          cacheName,
+          e
+        );
 
       }
 
@@ -662,152 +1330,288 @@ async function receiveSharedImage(){
     if(!found){
 
       openModal(`
+
         <div class="sectiontitle">
+
           <h2>📷 共有結果</h2>
-          <button class="secondary" onclick="closeModal()">閉じる</button>
+
+          <button
+            class="secondary"
+            onclick="closeModal()"
+          >
+            閉じる
+          </button>
+
         </div>
 
         <p>
-          DAM★ともから「うたベスト」は開きました。
+          うたベストは共有先として起動しました。
         </p>
 
         <p class="small">
-          今回は画像そのものは受け取れていません。
-          下の「受信したデータ」を見れば、DAM★ともから何が送られてきたのか確認できます。
+          今回は画像そのものを受け取れていません。
+          下の「受信したデータ」で、
+          共有データの内容を確認できます。
         </p>
 
-        <div style="background:#eef6ff;border-radius:14px;padding:14px;margin-top:10px">
-          ${debugData.style.display!=="none"
-            ?`<div class="debugData" style="display:block">${esc(debugData.textContent)}</div>`
-            :"受信データを確認できませんでした。"}
+        <div
+          style="
+            background:#eef6ff;
+            border-radius:14px;
+            padding:14px;
+            margin-top:10px
+          "
+        >
+
+          ${
+            debugData.style.display!=="none"
+
+              ?`
+                <div
+                  class="debugData"
+                  style="display:block"
+                >
+                  ${esc(
+                    debugData.textContent
+                  )}
+                </div>
+              `
+
+              :
+              "受信データを確認できませんでした。"
+          }
+
         </div>
+
       `);
 
       return;
     }
 
-    const blob=await found.blob();
+    const blob=
+      await found.blob();
 
-    const cache=await caches.open(foundCacheName);
-    await cache.delete(SHARED_IMAGE);
+    const cache=
+      await caches.open(
+        foundCacheName
+      );
 
-    const url=URL.createObjectURL(blob);
+    await cache.delete(
+      SHARED_IMAGE
+    );
 
-    debugText.textContent="画像を受け取りました！";
+    const url=
+      URL.createObjectURL(
+        blob
+      );
+
+    debugText.textContent=
+      "画像を受け取りました！";
 
     openModal(`
+
       <div class="sectiontitle">
-        <h2>📷 共有された採点結果</h2>
-        <button class="secondary" onclick="closeSharedImage('${url}')">閉じる</button>
+
+        <h2>
+          📷 共有された採点結果
+        </h2>
+
+        <button
+          class="secondary"
+          onclick="closeSharedImage('${url}')"
+        >
+          閉じる
+        </button>
+
       </div>
 
       <p class="small">
-        DAM★ともから画像を受け取ることに成功しました。
+        共有画像を受け取ることに成功しました。
       </p>
 
-      <div style="background:#f4f6fa;border-radius:14px;padding:8px;text-align:center">
+      <div
+        style="
+          background:#f4f6fa;
+          border-radius:14px;
+          padding:8px;
+          text-align:center
+        "
+      >
+
         <img
           src="${url}"
-          style="max-width:100%;max-height:65vh;object-fit:contain;border-radius:10px"
+          style="
+            max-width:100%;
+            max-height:65vh;
+            object-fit:contain;
+            border-radius:10px
+          "
         >
+
       </div>
 
-      <div style="margin-top:12px;padding:12px;background:#eef6ff;border-radius:12px;font-size:13px">
+      <div
+        style="
+          margin-top:12px;
+          padding:12px;
+          background:#eef6ff;
+          border-radius:12px;
+          font-size:13px
+        "
+      >
         ✅ 共有画像の受け取り成功
       </div>
+
     `);
 
   }catch(e){
 
-    console.error("receiveSharedImage error:",e);
+    console.error(
+      "receiveSharedImage error:",
+      e
+    );
 
-    debugBox.style.display="block";
-    debugText.textContent="共有データの確認中にエラーが発生しました。";
+    debugBox.style.display=
+      "block";
 
-    debugData.textContent=String(e);
-    debugData.style.display="block";
+    debugText.textContent=
+      "共有データの確認中にエラーが発生しました。";
+
+    debugData.textContent=
+      String(e);
+
+    debugData.style.display=
+      "block";
 
     openModal(`
+
       <div class="sectiontitle">
+
         <h2>⚠️ 共有エラー</h2>
-        <button class="secondary" onclick="closeModal()">閉じる</button>
+
+        <button
+          class="secondary"
+          onclick="closeModal()"
+        >
+          閉じる
+        </button>
+
       </div>
 
       <p>
-        DAM★ともから「うたベスト」は開きました。
+        うたベストは共有先として起動しました。
       </p>
 
       <p class="small">
-        共有データを確認する途中でエラーが発生しました。
+        共有データを確認する途中で
+        エラーが発生しました。
       </p>
 
-      <div style="background:#fff0f0;border-radius:12px;padding:12px">
-        エラー内容：${esc(String(e))}
+      <div
+        style="
+          background:#fff0f0;
+          border-radius:12px;
+          padding:12px
+        "
+      >
+        エラー内容：
+        ${esc(String(e))}
       </div>
+
     `);
 
   }
 }
 
 function closeSharedImage(url){
+
   closeModal();
 
   try{
+
     URL.revokeObjectURL(url);
+
   }catch(e){}
+
 }
 
-window.addEventListener("load",()=>{
+window.addEventListener(
+  "load",
+  ()=>{
 
-  if("serviceWorker" in navigator){
+    if(
+      "serviceWorker"
+      in navigator
+    ){
 
-    navigator.serviceWorker.ready
-      .then(()=>{
+      navigator.serviceWorker.ready
+        .then(()=>{
 
-        /*
-          Service Workerが最新版になるまで少し待ってから確認。
-        */
-        return navigator.serviceWorker.ready;
+          return navigator.serviceWorker.ready;
 
-      })
-      .then(()=>{
+        })
+        .then(()=>{
 
-        receiveSharedImage();
+          receiveSharedImage();
 
-      })
-      .catch(()=>{
+        })
+        .catch(()=>{
 
-        receiveSharedImage();
+          receiveSharedImage();
 
-      });
+        });
 
-  }else{
+    }else{
 
-    receiveSharedImage();
+      receiveSharedImage();
+
+    }
 
   }
+);
 
-});
 </script>
 
 <script>
-if("serviceWorker" in navigator){
 
-  window.addEventListener("load",()=>{
+if(
+  "serviceWorker"
+  in navigator
+){
 
-    navigator.serviceWorker.register("./sw.js")
-      .then(registration=>{
+  window.addEventListener(
+    "load",
+    ()=>{
 
-        registration.update().catch(()=>{});
+      navigator.serviceWorker
+        .register(
+          "./sw.js?v=7"
+        )
+        .then(
+          registration=>{
 
-      })
-      .catch(error=>{
-        console.log("Service Worker registration failed",error);
-      });
+            registration
+              .update()
+              .catch(()=>{});
 
-  });
+          }
+        )
+        .catch(
+          error=>{
+
+            console.log(
+              "Service Worker registration failed",
+              error
+            );
+
+          }
+        );
+
+    }
+  );
 
 }
+
 </script>
 
 </body>
