@@ -31,6 +31,7 @@ button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:poin
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#17202a;color:white;padding:10px 15px;border-radius:999px;display:none;z-index:30;font-size:13px}
 .shareDebug{margin:14px 0;padding:14px;border-radius:14px;background:#eef6ff;border:1px solid #b8d9ff;display:none}
 .shareDebug b{display:block;margin-bottom:6px}
+.debugData{margin-top:10px;background:#fff;border-radius:10px;padding:10px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;border:1px solid #d8e5f2}
 @media(max-width:430px){.twocol{grid-template-columns:1fr}.score{font-size:18px}}
 </style>
 </head>
@@ -42,7 +43,8 @@ button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:poin
 
 <div id="shareDebug" class="shareDebug">
   <b>📷 共有データを確認中</b>
-  <div id="shareDebugText">DAM★ともからの画像を確認しています。</div>
+  <div id="shareDebugText">DAM★ともからのデータを確認しています。</div>
+  <div id="shareDebugData" class="debugData" style="display:none"></div>
 </div>
 
 <section class="card">
@@ -68,6 +70,7 @@ let data=JSON.parse(localStorage.getItem(KEY)||'{"songs":[]}');
 
 const CACHE_NAMES=["uta-best-v5","uta-best-v4"];
 const SHARED_IMAGE="/__uta-best-shared-image";
+const SHARE_DEBUG="/__uta-best-share-debug";
 
 const $=id=>document.getElementById(id);
 
@@ -347,7 +350,7 @@ function deleteSong(id){
   save();
   closeModal();
   render();
-  showToast("曲を削除しました");
+  showToast("削除しました");
 }
 
 function render(){
@@ -505,34 +508,140 @@ function restoreUtaBest(event){
 
 <script>
 /*
-  DAM★とも共有画像の受け取り確認
-  今回はまず「画像が届いているか」を確実に確認する。
+  DAM★とも共有データの確認
+  v5のService Workerが保存した
+  「実際に届いたデータ」を表示する。
 */
 
 async function receiveSharedImage(){
 
   const debugBox=$("shareDebug");
   const debugText=$("shareDebugText");
+  const debugData=$("shareDebugData");
 
   if(!location.search.includes("share-target")){
     return;
   }
 
   debugBox.style.display="block";
-  debugText.textContent="共有された画像を探しています……";
+  debugText.textContent="DAM★ともから届いたデータを確認しています……";
 
   try{
 
-    let found=null;
-    let foundCacheName="";
+    let debugFound=null;
+    let debugCacheName="";
 
     /*
-      v5 → v4 の順番で確認。
-      今のsw.jsはv4なので、まずv4を必ず確認できるようにする。
+      まずv5のデバッグ情報を探す。
     */
     for(const cacheName of CACHE_NAMES){
 
       try{
+
+        const cache=await caches.open(cacheName);
+        const res=await cache.match(SHARE_DEBUG);
+
+        if(res){
+          debugFound=res;
+          debugCacheName=cacheName;
+          break;
+        }
+
+      }catch(e){
+
+        console.log("debug cache check error",cacheName,e);
+
+      }
+
+    }
+
+    /*
+      デバッグ情報を表示。
+    */
+    if(debugFound){
+
+      try{
+
+        const debugJson=await debugFound.json();
+
+        let text="";
+
+        text+="使用されたキャッシュ: "+debugCacheName+"\n\n";
+
+        if(debugJson.received===true){
+
+          text+="受信処理: 成功\n";
+          text+="画像発見: "+(debugJson.imageFound?"YES":"NO")+"\n";
+
+          if(debugJson.entries){
+
+            text+="\n--- 受信したデータ ---\n";
+
+            debugJson.entries.forEach((entry,i)=>{
+
+              text+="\n["+i+"] ";
+
+              if(entry.type==="text"){
+
+                text+="項目名: "+entry.key+"\n";
+                text+="種類: text\n";
+                text+="内容: "+entry.value;
+
+              }else{
+
+                text+="項目名: "+entry.key+"\n";
+                text+="種類: "+entry.type+"\n";
+                text+="ファイル名: "+entry.name+"\n";
+                text+="サイズ: "+entry.size+" bytes";
+
+              }
+
+              text+="\n";
+
+            });
+
+          }
+
+        }else{
+
+          text+="受信処理: 失敗\n";
+          text+="エラー: "+(debugJson.error||"不明");
+
+        }
+
+        if(debugJson.time){
+          text+="\n\n受信時刻: "+debugJson.time;
+        }
+
+        debugData.textContent=text;
+        debugData.style.display="block";
+
+        debugText.textContent="DAM★ともから届いたデータを確認しました。";
+
+      }catch(e){
+
+        debugData.textContent="デバッグ情報の読み取りに失敗しました。";
+        debugData.style.display="block";
+
+      }
+
+    }else{
+
+      debugText.textContent="共有データの確認情報が見つかりませんでした。";
+
+    }
+
+    /*
+      実際の画像も確認。
+    */
+
+    let found=null;
+    let foundCacheName="";
+
+    for(const cacheName of CACHE_NAMES){
+
+      try{
+
         const cache=await caches.open(cacheName);
         const res=await cache.match(SHARED_IMAGE);
 
@@ -541,15 +650,16 @@ async function receiveSharedImage(){
           foundCacheName=cacheName;
           break;
         }
+
       }catch(e){
-        console.log("cache check error",cacheName,e);
+
+        console.log("image cache check error",cacheName,e);
+
       }
+
     }
 
     if(!found){
-
-      debugText.textContent=
-        "共有データを受け取りましたが、画像を見つけられませんでした。";
 
       openModal(`
         <div class="sectiontitle">
@@ -562,12 +672,14 @@ async function receiveSharedImage(){
         </p>
 
         <p class="small">
-          ただ、共有された画像をまだ受け取れていません。
-          次の修正でここを直します。
+          今回は画像そのものは受け取れていません。
+          下の「受信したデータ」を見れば、DAM★ともから何が送られてきたのか確認できます。
         </p>
 
-        <div style="background:#f4f6fa;border-radius:14px;padding:14px;margin-top:10px">
-          共有先として「うたベスト」が表示されるところまでは成功しています。
+        <div style="background:#eef6ff;border-radius:14px;padding:14px;margin-top:10px">
+          ${debugData.style.display!=="none"
+            ?`<div class="debugData" style="display:block">${esc(debugData.textContent)}</div>`
+            :"受信データを確認できませんでした。"}
         </div>
       `);
 
@@ -576,9 +688,6 @@ async function receiveSharedImage(){
 
     const blob=await found.blob();
 
-    /*
-      読み取った画像は一度表示したら削除。
-    */
     const cache=await caches.open(foundCacheName);
     await cache.delete(SHARED_IMAGE);
 
@@ -613,7 +722,10 @@ async function receiveSharedImage(){
     console.error("receiveSharedImage error:",e);
 
     debugBox.style.display="block";
-    debugText.textContent="画像の受け取り処理でエラーが発生しました。";
+    debugText.textContent="共有データの確認中にエラーが発生しました。";
+
+    debugData.textContent=String(e);
+    debugData.style.display="block";
 
     openModal(`
       <div class="sectiontitle">
@@ -626,13 +738,14 @@ async function receiveSharedImage(){
       </p>
 
       <p class="small">
-        画像を受け取る途中でエラーが発生しました。
+        共有データを確認する途中でエラーが発生しました。
       </p>
 
       <div style="background:#fff0f0;border-radius:12px;padding:12px">
-        ここまで確認できたので、この結果を使って次の修正ができます。
+        エラー内容：${esc(String(e))}
       </div>
     `);
+
   }
 }
 
@@ -646,17 +759,26 @@ function closeSharedImage(url){
 
 window.addEventListener("load",()=>{
 
-  /*
-    Service Workerの準備を待ってから共有画像を確認する。
-  */
   if("serviceWorker" in navigator){
 
     navigator.serviceWorker.ready
       .then(()=>{
+
+        /*
+          Service Workerが最新版になるまで少し待ってから確認。
+        */
+        return navigator.serviceWorker.ready;
+
+      })
+      .then(()=>{
+
         receiveSharedImage();
+
       })
       .catch(()=>{
+
         receiveSharedImage();
+
       });
 
   }else{
@@ -676,9 +798,6 @@ if("serviceWorker" in navigator){
     navigator.serviceWorker.register("./sw.js")
       .then(registration=>{
 
-        /*
-          新しいsw.jsがある場合は確認する。
-        */
         registration.update().catch(()=>{});
 
       })
