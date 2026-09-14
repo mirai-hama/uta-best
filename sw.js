@@ -52,6 +52,8 @@ self.addEventListener("fetch", event => {
 
           const entries = [];
 
+          console.log("SHARE FORM DATA", formData);
+
           for (const [key, value] of formData.entries()) {
 
             if (value instanceof File) {
