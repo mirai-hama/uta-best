@@ -1,4 +1,5 @@
-const CACHE_NAME = "uta-best-v5";
+const CACHE_NAME = "uta-best-v6";
+
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -24,8 +25,8 @@ self.addEventListener("activate", event => {
       .then(keys =>
         Promise.all(
           keys
-            .filter(k => k !== CACHE_NAME)
-            .map(k => caches.delete(k))
+            .filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
         )
       )
       .then(() => self.clients.claim())
@@ -34,10 +35,7 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
 
-  /*
-    DAM★とも → うたベスト
-    共有された画像を受け取る処理
-  */
+  // DAM★ともなどから共有されたデータを受信
   if (
     event.request.method === "POST" &&
     new URL(event.request.url).pathname === "/"
@@ -50,41 +48,8 @@ self.addEventListener("fetch", event => {
 
           const formData = await event.request.formData();
 
-          /*
-            まず「image」という名前で送られてきた
-            ファイルを探す
-          */
-          let image = formData.get("image");
+          let image = null;
 
-          /*
-            Android側の共有方法によっては、
-            files の中に入っている場合があるため、
-            image が取れなかった場合は全項目を確認する。
-          */
-          if (!image) {
-
-            for (const [key, value] of formData.entries()) {
-
-              if (
-                value instanceof File &&
-                value.type &&
-                value.type.startsWith("image/")
-              ) {
-                image = value;
-                break;
-              }
-
-            }
-
-          }
-
-          const cache = await caches.open(CACHE_NAME);
-
-          /*
-            デバッグ情報も保存する。
-            これで「画像が届いていない」のか
-            「保存に失敗した」のかを切り分けられる。
-          */
           const entries = [];
 
           for (const [key, value] of formData.entries()) {
@@ -93,10 +58,18 @@ self.addEventListener("fetch", event => {
 
               entries.push({
                 key: key,
-                type: value.type,
+                type: value.type || "file",
                 size: value.size,
                 name: value.name
               });
+
+              if (
+                !image &&
+                value.type &&
+                value.type.startsWith("image/")
+              ) {
+                image = value;
+              }
 
             } else {
 
@@ -110,13 +83,16 @@ self.addEventListener("fetch", event => {
 
           }
 
+          const cache = await caches.open(CACHE_NAME);
+
+          // 受信した内容を記録
           await cache.put(
             SHARE_DEBUG,
             new Response(
               JSON.stringify({
                 received: true,
-                entries: entries,
                 imageFound: !!image,
+                entries: entries,
                 time: new Date().toISOString()
               }),
               {
@@ -127,9 +103,7 @@ self.addEventListener("fetch", event => {
             )
           );
 
-          /*
-            画像が見つかった場合
-          */
+          // 画像があれば保存
           if (image) {
 
             const imageBlob = await image.arrayBuffer();
@@ -145,46 +119,36 @@ self.addEventListener("fetch", event => {
 
           }
 
-          /*
-            共有処理が終わったら
-            うたベストを開く
-          */
           return Response.redirect(
             "/?share-target",
             303
           );
 
-        } catch (e) {
+        } catch (error) {
 
-          /*
-            エラー内容も保存
-          */
-          try {
+          const cache = await caches.open(CACHE_NAME);
 
-            const cache = await caches.open(CACHE_NAME);
-
-            await cache.put(
-              SHARE_DEBUG,
-              new Response(
-                JSON.stringify({
-                  received: false,
-                  error: String(e),
-                  time: new Date().toISOString()
-                }),
-                {
-                  headers: {
-                    "Content-Type": "application/json"
-                  }
+          await cache.put(
+            SHARE_DEBUG,
+            new Response(
+              JSON.stringify({
+                received: false,
+                error: String(error),
+                time: new Date().toISOString()
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json"
                 }
-              )
-            );
-
-          } catch (_) {}
+              }
+            )
+          );
 
           return Response.redirect(
             "/?share-target",
             303
           );
+
         }
 
       })()
@@ -193,9 +157,6 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  /*
-    GET処理
-  */
   if (event.request.method !== "GET") {
     return;
   }
@@ -205,4 +166,5 @@ self.addEventListener("fetch", event => {
       cached => cached || fetch(event.request)
     )
   );
+
 });
