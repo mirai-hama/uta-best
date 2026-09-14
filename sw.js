@@ -15,27 +15,34 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
   );
-
   self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+    caches.keys()
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+        )
       )
-    ).then(() => self.clients.claim())
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", event => {
 
+  const url = new URL(event.request.url);
+
+  /*
+   * Androidの「共有」から
+   * /share にPOSTされたデータを受け取る
+   */
   if (
     event.request.method === "POST" &&
-    new URL(event.request.url).pathname === "/share"
+    url.pathname === "/share"
   ) {
 
     event.respondWith(
@@ -43,12 +50,16 @@ self.addEventListener("fetch", event => {
 
         try {
 
-          const formData = await event.request.formData();
+          const formData =
+            await event.request.formData();
 
           let image = null;
           const entries = [];
 
-          for (const [key, value] of formData.entries()) {
+          for (
+            const [key, value]
+            of formData.entries()
+          ) {
 
             if (value instanceof File) {
 
@@ -64,7 +75,9 @@ self.addEventListener("fetch", event => {
                 value.type &&
                 value.type.startsWith("image/")
               ) {
+
                 image = value;
+
               }
 
             } else {
@@ -76,10 +89,15 @@ self.addEventListener("fetch", event => {
               });
 
             }
+
           }
 
-          const cache = await caches.open(CACHE_NAME);
+          const cache =
+            await caches.open(CACHE_NAME);
 
+          /*
+           * 受信状況を保存
+           */
           await cache.put(
             SHARE_DEBUG,
             new Response(
@@ -91,26 +109,40 @@ self.addEventListener("fetch", event => {
               }),
               {
                 headers: {
-                  "Content-Type": "application/json"
+                  "Content-Type":
+                    "application/json"
                 }
               }
             )
           );
 
+          /*
+           * 画像があれば保存
+           */
           if (image) {
 
-            const imageBlob = await image.arrayBuffer();
+            const imageBlob =
+              await image.arrayBuffer();
 
             await cache.put(
               SHARED_IMAGE,
-              new Response(imageBlob, {
-                headers: {
-                  "Content-Type": image.type || "image/jpeg"
+              new Response(
+                imageBlob,
+                {
+                  headers: {
+                    "Content-Type":
+                      image.type ||
+                      "image/jpeg"
+                  }
                 }
-              })
+              )
             );
+
           }
 
+          /*
+           * うたベスト本体へ戻す
+           */
           return Response.redirect(
             "/?share-target",
             303
@@ -118,7 +150,8 @@ self.addEventListener("fetch", event => {
 
         } catch (error) {
 
-          const cache = await caches.open(CACHE_NAME);
+          const cache =
+            await caches.open(CACHE_NAME);
 
           await cache.put(
             SHARE_DEBUG,
@@ -130,7 +163,8 @@ self.addEventListener("fetch", event => {
               }),
               {
                 headers: {
-                  "Content-Type": "application/json"
+                  "Content-Type":
+                    "application/json"
                 }
               }
             )
@@ -140,20 +174,27 @@ self.addEventListener("fetch", event => {
             "/?share-target",
             303
           );
+
         }
+
       })()
     );
 
     return;
   }
 
+  /*
+   * 通常のGET通信
+   */
   if (event.request.method !== "GET") {
     return;
   }
 
   event.respondWith(
     caches.match(event.request).then(
-      cached => cached || fetch(event.request)
+      cached =>
+        cached || fetch(event.request)
     )
   );
+
 });
