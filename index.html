@@ -25,7 +25,7 @@ button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:poin
 .formgrid{display:grid;gap:10px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .actions{display:flex;gap:8px;margin-top:14px}.actions button{flex:1}
 .scorelist{display:grid;gap:12px}.scorecard{border:1px solid #e0e5ea;border-radius:14px;padding:12px}.scorehead{display:flex;align-items:center;gap:8px}.scorehead b{font-size:20px}.scorehead .sc{margin-left:auto;font-size:22px;font-weight:850}
-.photos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.photoBox{border:1px dashed #b8c2cc;border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f7f9fb;position:relative}
+.photos{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}.photoBox{border:1px dashed #b8c2cc;border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#f7f9fb;position:relative}
 .photoBox img{width:100%;height:160px;object-fit:contain}.photoBox[onclick]{cursor:zoom-in}.photoLabel{color:#68727d;font-size:12px;text-align:center;padding:8px}.photoBox input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .small{font-size:12px;color:#68727d}.sectiontitle{display:flex;align-items:center;justify-content:space-between;gap:8px}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#17202a;color:white;padding:10px 15px;border-radius:999px;display:none;z-index:30;font-size:13px}
@@ -92,7 +92,7 @@ function saveScore(songId){
  const n=parseFloat($("newScore").value);
  if(!Number.isFinite(n)||n<0||n>100){showToast("点数を正しく入力してください");return}
  const s=data.songs.find(x=>x.id===songId);
- s.scores.push({id:uid(),score:n,photo1:"",photo2:""});
+ s.scores.push({id:uid(),score:n,photo1:""});
  s.scores.sort((a,b)=>b.score-a.score);
  s.scores=s.scores.slice(0,3);
  save();closeModal();openSong(songId);render();showToast("点数を保存しました");
@@ -109,39 +109,46 @@ function openSong(id){
  </div>`);
 }
 function scoreCard(s,r,i){
- const p1=r.photo1?`<div class="photoBox" onclick="viewPhoto('${s.id}','${r.id}',1)"><img src="${r.photo1}" alt="採点結果の写真"></div>`:`<label class="photoBox"><div class="photoLabel">📷 採点結果<br>あとから追加</div><input type="file" accept="image/*" onchange="photoChanged('${s.id}','${r.id}',1,this)"></label>`;
- const p2=r.photo2?`<div class="photoBox" onclick="viewPhoto('${s.id}','${r.id}',2)"><img src="${r.photo2}" alt="音程正確率の写真"></div>`:`<label class="photoBox"><div class="photoLabel">📷 音程正確率<br>あとから追加</div><input type="file" accept="image/*" onchange="photoChanged('${s.id}','${r.id}',2,this)"></label>`;
+ const p1=r.photo1?`<div class="photoBox" onclick="viewPhoto('${s.id}','${r.id}')"><img src="${r.photo1}" alt="採点結果の写真"></div>`:`<label class="photoBox"><div class="photoLabel">📷 採点結果<br>あとから追加</div><input type="file" accept="image/*" onchange="photoChanged('${s.id}','${r.id}',this)"></label>`;
  return `<div class="scorecard"><div class="scorehead"><b>${["🥇","🥈","🥉"][i]}</b><span>${i+1}位</span><span class="sc">${r.score.toFixed(3)}点</span></div>
- <div class="photos">${p1}${p2}</div>
+ <div class="photos">${p1}</div>
  <div class="actions">
-   <button class="secondary" onclick="changePhoto('${s.id}','${r.id}',1)">📷 写真を変更</button>
-   <button class="secondary" onclick="changePhoto('${s.id}','${r.id}',2)">📷 写真を変更</button>
+   <button class="secondary" onclick="changePhoto('${s.id}','${r.id}')">📷 写真を変更</button>
  </div>
  <div class="actions"><button class="danger" onclick="removeScore('${s.id}','${r.id}')">この記録を削除</button></div></div>`
 }
-function photoChanged(songId,scoreId,num,input){
+function photoChanged(songId,scoreId,input){
  const file=input.files?.[0];if(!file)return;
  const reader=new FileReader();
- reader.onload=()=>{const s=data.songs.find(x=>x.id===songId),r=s.scores.find(x=>x.id===scoreId);r["photo"+num]=reader.result;save();openSong(songId);showToast("写真を保存しました")};
+ reader.onload=()=>{const s=data.songs.find(x=>x.id===songId),r=s.scores.find(x=>x.id===scoreId);r.photo1=reader.result;save();openSong(songId);showToast("写真を保存しました")};
  reader.readAsDataURL(file);
 }
-function changePhoto(songId,scoreId,num){
+function changePhoto(songId,scoreId){
  const input=document.createElement("input");
  input.type="file";input.accept="image/*";
- input.onchange=()=>photoChanged(songId,scoreId,num,input);
+ input.onchange=()=>photoChanged(songId,scoreId,input);
  input.click();
 }
-function viewPhoto(songId,scoreId,num){
- const s=data.songs.find(x=>x.id===songId),r=s.scores.find(x=>x.id===scoreId),src=r["photo"+num];
+function viewPhoto(songId,scoreId){
+ const s=data.songs.find(x=>x.id===songId),r=s.scores.find(x=>x.id===scoreId),src=r.photo1;
  if(!src)return;
  openModal(`<div class="sectiontitle"><span></span><button class="secondary" onclick="closeModal()">閉じる</button></div>
  <div style="background:#f4f6fa;border-radius:14px;padding:8px;text-align:center;margin-top:10px"><img src="${src}" style="max-width:100%;max-height:70vh;object-fit:contain;border-radius:10px"></div>
- <div class="actions"><button class="secondary" onclick="changePhoto('${songId}','${scoreId}',${num})">写真を変更</button><button class="danger" onclick="deletePhoto('${songId}','${scoreId}',${num})">写真を削除</button></div>`);
+ <div class="actions"><button class="secondary" onclick="changePhoto('${songId}','${scoreId}')">写真を変更</button><button class="danger" onclick="deletePhoto('${songId}','${scoreId}')">写真を削除</button></div>`);
 }
-function deletePhoto(songId,scoreId,num){
+function deletePhoto(songId,scoreId){
  const s=data.songs.find(x=>x.id===songId),r=s.scores.find(x=>x.id===scoreId);
- r["photo"+num]="";save();openSong(songId);showToast("写真を削除しました");
+ r.photo1="";save();openSong(songId);showToast("写真を削除しました");
 }
+function migratePhotosToOne(){
+ let changed=false;
+ data.songs.forEach(s=>s.scores.forEach(r=>{
+   if(!r.photo1 && r.photo2){r.photo1=r.photo2;changed=true}
+   if(Object.prototype.hasOwnProperty.call(r,"photo2")){delete r.photo2;changed=true}
+ }));
+ if(changed)save();
+}
+migratePhotosToOne();
 function removeScore(songId,scoreId){
  if(!confirm("この点数記録を削除しますか？"))return;
  const s=data.songs.find(x=>x.id===songId);s.scores=s.scores.filter(r=>r.id!==scoreId);save();openSong(songId);render();showToast("削除しました");
@@ -168,6 +175,21 @@ function renderSongs(){
 render();
 </script>
 <div id="backupPanel" style="margin:18px 0 30px;padding:16px;border-radius:16px;background:rgba(255,255,255,.92);box-shadow:0 4px 16px rgba(70,70,130,.10)"><div style="font-weight:700;font-size:16px;margin-bottom:8px">💾 データのバックアップ</div><div style="font-size:13px;line-height:1.6;margin-bottom:12px">曲・点数・キー・写真をファイルに保存できます。<br>スマホを買い替えるときは、古いスマホでバックアップして、新しいスマホで復元してください。</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" onclick="backupUtaBest()">📤 データをバックアップ</button><button type="button" onclick="document.getElementById('restoreFile').click()">📥 データを復元</button><input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreUtaBest(event)"></div></div><script>function backupUtaBest(){try{const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);data[k]=localStorage.getItem(k)}const blob=new Blob([JSON.stringify({app:"うたベスト",version:1,data:data})],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);const d=new Date(),pad=n=>String(n).padStart(2,"0");a.download=`うたベスト_バックアップ_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);alert("バックアップファイルを保存しました。")}catch(e){alert("バックアップに失敗しました")}}function restoreUtaBest(event){const file=event.target.files[0];event.target.value="";if(!file)return;const reader=new FileReader();reader.onload=function(){try{const obj=JSON.parse(reader.result);if(!obj||obj.app!=="うたベスト"||!obj.data)throw new Error();if(!confirm("現在のうたベストのデータをバックアップの内容で置き換えます。よろしいですか？"))return;localStorage.clear();Object.keys(obj.data).forEach(k=>localStorage.setItem(k,obj.data[k]));alert("データを復元しました。アプリを再読み込みします。");location.reload()}catch(e){alert("このファイルは、うたベストのバックアップファイルではありません")}};reader.readAsText(file)}</script>
+<script>
+async function receiveSharedImage(){
+  if(!location.search.includes("share-target")) return;
+  try{
+    const cache=await caches.open("uta-best-v4");
+    const res=await cache.match("/__uta-best-shared-image");
+    if(!res)return;
+    const blob=await res.blob();
+    await cache.delete("/__uta-best-shared-image");
+    const url=URL.createObjectURL(blob);
+    openModal(`<div class="sectiontitle"><h2>📷 共有された採点結果</h2><button class="secondary" onclick="closeModal();URL.revokeObjectURL('${url}')">閉じる</button></div><p class="small">DAM★ともから共有された画像を受け取りました。まずはここまで自動で受け取れるようにしました。次の段階で、この画像から曲名・点数などを読み取る機能を追加できます。</p><div style="background:#f4f6fa;border-radius:14px;padding:8px;text-align:center"><img src="${url}" style="max-width:100%;max-height:65vh;object-fit:contain;border-radius:10px"></div>`);
+  }catch(e){}
+}
+window.addEventListener("load", receiveSharedImage);
+</script>
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
