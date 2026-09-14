@@ -122,9 +122,7 @@ let data=JSON.parse(
   localStorage.getItem(KEY)||'{"songs":[]}'
 );
 
-/* 最新のService Workerから共有データを探す */
 const CACHE_NAMES=[
-  "uta-best-v7",
   "uta-best-v6",
   "uta-best-v5",
   "uta-best-v4"
@@ -1074,12 +1072,6 @@ function restoreUtaBest(event){
 
 <script>
 
-/*
-  共有データ確認
-  最新のService Workerが保存した
-  実際に届いたデータを確認する。
-*/
-
 async function receiveSharedImage(){
 
   const debugBox=
@@ -1585,7 +1577,7 @@ if(
 
       navigator.serviceWorker
         .register(
-          "./sw.js?v=7"
+          "./sw.js"
         )
         .then(
           registration=>{
