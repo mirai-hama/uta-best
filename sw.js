@@ -1,4 +1,4 @@
-const CACHE_NAME = "uta-best-v7";
+const CACHE_NAME = "uta-best-v6";
 
 const APP_SHELL = [
   "/",
@@ -34,15 +34,9 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
 
-  const url = new URL(event.request.url);
-
-  /*
-   * Androidの「共有」から
-   * /share にPOSTされたデータを受け取る
-   */
   if (
     event.request.method === "POST" &&
-    url.pathname === "/share"
+    new URL(event.request.url).pathname === "/"
   ) {
 
     event.respondWith(
@@ -75,9 +69,7 @@ self.addEventListener("fetch", event => {
                 value.type &&
                 value.type.startsWith("image/")
               ) {
-
                 image = value;
-
               }
 
             } else {
@@ -89,15 +81,11 @@ self.addEventListener("fetch", event => {
               });
 
             }
-
           }
 
           const cache =
             await caches.open(CACHE_NAME);
 
-          /*
-           * 受信状況を保存
-           */
           await cache.put(
             SHARE_DEBUG,
             new Response(
@@ -116,9 +104,6 @@ self.addEventListener("fetch", event => {
             )
           );
 
-          /*
-           * 画像があれば保存
-           */
           if (image) {
 
             const imageBlob =
@@ -131,18 +116,13 @@ self.addEventListener("fetch", event => {
                 {
                   headers: {
                     "Content-Type":
-                      image.type ||
-                      "image/jpeg"
+                      image.type || "image/jpeg"
                   }
                 }
               )
             );
-
           }
 
-          /*
-           * うたベスト本体へ戻す
-           */
           return Response.redirect(
             "/?share-target",
             303
@@ -174,27 +154,20 @@ self.addEventListener("fetch", event => {
             "/?share-target",
             303
           );
-
         }
-
       })()
     );
 
     return;
   }
 
-  /*
-   * 通常のGET通信
-   */
   if (event.request.method !== "GET") {
     return;
   }
 
   event.respondWith(
     caches.match(event.request).then(
-      cached =>
-        cached || fetch(event.request)
+      cached => cached || fetch(event.request)
     )
   );
-
 });
